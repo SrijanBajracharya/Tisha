@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS T_STONE_TYPE
+(
+    id          BIGINT(20) NOT NULL AUTO_INCREMENT,
+    name        VARCHAR(50) NOT NULL,
+    type        VARCHAR(50) NOT NULL,
+    caret       decimal(19,2) NULL,
+
+    PRIMARY KEY (id)
+)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
