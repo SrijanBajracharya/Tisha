@@ -8,6 +8,8 @@ import com.gemsansar.tisha.user.persistence.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 class DefaultReadUserStorageService implements ReadUserStorageService {
@@ -23,9 +25,8 @@ class DefaultReadUserStorageService implements ReadUserStorageService {
     }
 
     @Override
-    public User findByEmail(String email) {
-        UserEntity entity = userEntityRepository.findByEmail(email).orElseThrow(() ->
-                new UseCaseException("User not found with email" + email));
-        return userEntityMapper.mapToDomain(entity);
+    public Optional<User> findByEmail(String email) {
+        Optional<UserEntity> entity = userEntityRepository.findByEmail(email);
+        return entity.map(userEntityMapper::mapToDomain);
     }
 }

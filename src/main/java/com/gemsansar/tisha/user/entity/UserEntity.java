@@ -3,15 +3,12 @@ package com.gemsansar.tisha.user.entity;
 import com.gemsansar.tisha.platform.enums.AppRole;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "T_USER")
 @NoArgsConstructor
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @AllArgsConstructor

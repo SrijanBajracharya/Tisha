@@ -6,6 +6,8 @@ import com.gemsansar.tisha.company.domain.dto.response.CompanyResponse;
 import com.gemsansar.tisha.company.domain.dto.response.CreateCompanyResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+
 @Component
 class CompanyDomainMapper {
 
@@ -15,6 +17,7 @@ class CompanyDomainMapper {
                 .associationNumber(request.getAssociationNumber())
                 .associationName(request.getAssociationName())
                 .panNumber(request.getPanNumber())
+                .createdDate(Instant.now())
                 .build();
     }
 

@@ -15,10 +15,6 @@ class DefaultLoginUserUseCaseService implements LoginUserUseCaseService {
 
     @Override
     public User execute(String email, String password) {
-        User user = readUserStorageService.findByEmail(email);
-        if(!user.getPassword().equals(password)){
-            throw new UseCaseException("Invalid Password");
-        }
-        return user;
+        return readUserStorageService.findByEmail(email).orElseThrow(()-> new UseCaseException("User not found with email:" + email));
     }
 }

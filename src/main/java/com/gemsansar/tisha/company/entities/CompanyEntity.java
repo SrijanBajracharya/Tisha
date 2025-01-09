@@ -2,15 +2,12 @@ package com.gemsansar.tisha.company.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.time.Instant;
 
 @Entity
 @Table(name = "T_COMPANY")
 @NoArgsConstructor
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Getter
 @Setter
 @AllArgsConstructor

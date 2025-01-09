@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 @Component
 class UserDomainMapper {
 
-    public User mapToDomain(CreateUserRequest createUserRequest){
+    public User mapToDomain(CreateUserRequest createUserRequest, String encodedPassword){
         return User.builder()
                 .firstName(createUserRequest.getFirstName())
                 .lastName(createUserRequest.getLastName())
-                .password(createUserRequest.getPassword())
+                .password(encodedPassword)
                 .email(createUserRequest.getEmail())
                 .role(createUserRequest.getRole())
                 .companyId(createUserRequest.getCompanyId())
