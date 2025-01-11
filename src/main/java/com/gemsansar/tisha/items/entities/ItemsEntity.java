@@ -26,7 +26,7 @@ public class ItemsEntity extends AbstractBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "gold_rate", nullable = false)
+    @Column(name = "rate", nullable = false)
     private BigDecimal rate;
 
     @ManyToOne
@@ -36,7 +36,7 @@ public class ItemsEntity extends AbstractBaseEntity {
     @OneToMany(mappedBy = "item")
     private List<StoneEntity> stones;
 
-    @OneToOne(mappedBy = "item")
+    @OneToOne(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private CostEntity cost;
 
     @Column(name = "name", nullable = false)

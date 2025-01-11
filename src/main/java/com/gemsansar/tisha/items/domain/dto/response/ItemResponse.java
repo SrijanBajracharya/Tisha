@@ -1,5 +1,6 @@
 package com.gemsansar.tisha.items.domain.dto.response;
 
+import com.gemsansar.tisha.cost.domain.response.CostResponse;
 import com.gemsansar.tisha.items.domain.ItemStatus;
 import com.gemsansar.tisha.order.domain.ItemType;
 import com.gemsansar.tisha.stone.domain.dto.response.StoneResponse;
@@ -25,4 +26,5 @@ public class ItemResponse {
     private List<StoneResponse> stones;
     private BigDecimal rate;
     private ItemType itemType;
+    private CostResponse costResponse;
 }

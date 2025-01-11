@@ -1,7 +1,9 @@
 package com.gemsansar.tisha.order.resource;
 
 import com.gemsansar.tisha.cost.domain.Cost;
+import com.gemsansar.tisha.cost.domain.request.CostCreateRequest;
 import com.gemsansar.tisha.cost.domain.request.CostUpdateRequest;
+import com.gemsansar.tisha.cost.domain.response.CostResponse;
 import com.gemsansar.tisha.items.domain.Item;
 import com.gemsansar.tisha.items.domain.ItemStatus;
 import com.gemsansar.tisha.items.domain.dto.request.ItemCreateRequest;
@@ -18,6 +20,8 @@ import com.gemsansar.tisha.stone.domain.dto.response.StoneResponse;
 import com.gemsansar.tisha.user.domain.User;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +31,8 @@ import java.util.stream.Collectors;
 @Component
 class OrderDomainMapper {
 
+    private static final BigDecimal RATE_PER_GRAM = BigDecimal.valueOf(10);
+
     public Order mapToDomain(OrderRequest request, User user, OrderStatus status, ItemStatus itemStatus){
         return Order.builder()
                 .comment(request.getComment())
@@ -34,8 +40,9 @@ class OrderDomainMapper {
                 .status(status)
                 .lastModifiedBy(user.getId())
                 .lastModifiedDate(Instant.now())
-                .items(mapToItems(request.getItems(), itemStatus))
+                .items(mapToItems(request.getItems(), itemStatus, user.getId()))
                 .customerId(request.getCustomerId())
+                .createBy(user.getId())
                 .build();
     }
 
@@ -99,12 +106,26 @@ class OrderDomainMapper {
     private ItemResponse mapToItemResponse(Item item){
         return ItemResponse.builder()
                 .id(item.getId())
+                .rate(item.getRate())
                 .status(item.getStatus())
                 .purity(item.getPurity())
+                .weight(item.getWeight())
+                .comment(item.getComment())
+                .status(item.getStatus())
                 .name(item.getName())
                 .stones(mapToStoneResponses(item.getStones()))
                 .total(PriceCalculation.calculateItemTotal(item))
                 .itemType(item.getItemType())
+                .costResponse(mapToCostResponse(item.getCost()))
+                .build();
+    }
+
+    private CostResponse mapToCostResponse(Cost cost){
+        return CostResponse.builder()
+                .id(cost.getId())
+                .itemId(cost.getItemId())
+                .jartiQuantity(cost.getJartiQuantity())
+                .jyala(cost.getJyala())
                 .build();
     }
 
@@ -124,11 +145,11 @@ class OrderDomainMapper {
                 .build();
     }
 
-    private List<Item> mapToItems(List<ItemCreateRequest> items, ItemStatus itemStatus){
-        return items.stream().map(item -> mapToItemDomain(item, itemStatus)).toList();
+    private List<Item> mapToItems(List<ItemCreateRequest> items, ItemStatus itemStatus, Long createdBy){
+        return items.stream().map(item -> mapToItemDomain(item, itemStatus, createdBy)).toList();
     }
 
-    private Item mapToItemDomain(ItemCreateRequest item, ItemStatus itemStatus){
+    private Item mapToItemDomain(ItemCreateRequest item, ItemStatus itemStatus, Long createdBy){
         return Item.builder()
                 .comment(item.getComment())
                 .name(item.getName())
@@ -136,8 +157,18 @@ class OrderDomainMapper {
                 .status(itemStatus)
                 .purity(item.getPurity())
                 .weight(item.getWeight())
-                .rate(item.getRate())
+                .rate(item.getRate().divide(RATE_PER_GRAM,2, RoundingMode.HALF_UP))
                 .itemType(item.getItemType())
+                .cost(mapToCost(item.getCost()))
+                .createdBy(createdBy)
+                .lastModifiedBy(createdBy)
+                .build();
+    }
+
+    private Cost mapToCost(CostCreateRequest request){
+        return Cost.builder()
+                .jyala(request.getJyala())
+                .jartiQuantity(request.getJartiQuantity())
                 .build();
     }
 

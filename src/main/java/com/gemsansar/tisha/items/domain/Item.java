@@ -29,4 +29,5 @@ public class Item {
     private Long lastModifiedBy;
     private List<Stone> stones;
     private ItemType itemType;
+    private Long createdBy;
 }

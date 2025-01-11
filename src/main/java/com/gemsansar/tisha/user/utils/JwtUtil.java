@@ -10,7 +10,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private final String SECRET_KEY = "your_secret_key";
-    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 15; // 15 minutes
+    private final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60; // 1 hr
     private final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24 * 7; // 7 days
 
     public String generateAccessToken(User user) {

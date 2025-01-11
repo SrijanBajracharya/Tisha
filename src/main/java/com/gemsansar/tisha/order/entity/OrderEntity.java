@@ -25,7 +25,7 @@ public class OrderEntity extends AbstractBaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy="order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemsEntity> items;
 
     @Column(name = "due_date")

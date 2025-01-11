@@ -1,5 +1,6 @@
 package com.gemsansar.tisha.items.domain.dto.request;
 
+import com.gemsansar.tisha.cost.domain.request.CostCreateRequest;
 import com.gemsansar.tisha.order.domain.ItemType;
 import com.gemsansar.tisha.stone.domain.Stone;
 import lombok.Builder;
@@ -21,5 +22,5 @@ public class ItemCreateRequest {
     private List<Stone> stones;
     private BigDecimal rate;
     private ItemType itemType;
-
+    private CostCreateRequest cost;
 }

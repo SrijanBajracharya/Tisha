@@ -20,8 +20,9 @@ class OrderEntityMapper {
         entity.setComment(order.getComment());
         entity.setDueDate(order.getDueDate());
         entity.setLastModifiedBy(order.getLastModifiedBy());
-        entity.setItems(mapToItems(order.getItems()));
+        entity.setItems(mapToItemEntities(entity, order.getItems()));
         entity.setCustomerId(order.getCustomerId());
+        entity.setCreatedBy(order.getCreateBy());
         return entity;
     }
 
@@ -42,10 +43,10 @@ class OrderEntityMapper {
     }
 
     private List<Item> mapToItemsDomain(List<ItemsEntity> items){
-        return items.stream().map(this::mapToItem).toList();
+        return items.stream().map(this::mapToItemEntity).toList();
     }
 
-    private Item mapToItem(ItemsEntity item){
+    private Item mapToItemEntity(ItemsEntity item){
         return Item.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -56,6 +57,9 @@ class OrderEntityMapper {
                 .cost(mapToCostDomain(item.getCost()))
                 .rate(item.getRate())
                 .itemType(item.getItemType())
+                .lastModifiedBy(item.getLastModifiedBy())
+                .createdBy(item.getCreatedBy())
+                .status(item.getStatus())
                 .build();
     }
 
@@ -63,29 +67,40 @@ class OrderEntityMapper {
         return Cost.builder()
                 .id(cost.getId())
                 .jyala(cost.getJyala())
+                .jartiQuantity(cost.getJartiQuantity())
+                .itemId(cost.getItem().getId())
                 .build();
     }
 
-    private List<ItemsEntity> mapToItems(List<Item> items){
-        return items.stream().map(this::mapToItem).toList();
+    private List<ItemsEntity> mapToItemEntities(OrderEntity orderEntity, List<Item> items){
+        return items.stream().map(item -> mapToItemEntity(item, orderEntity)).toList();
     }
 
-    private ItemsEntity mapToItem(Item item){
-        return ItemsEntity.builder()
-                .name(item.getName())
-                .comment(item.getComment())
-                .dueDate(item.getDueDate())
-                .purity(item.getPurity())
-                .weight(item.getWeight())
-                .cost(mapToCost(item.getCost()))
-                .rate(item.getRate())
-                .itemType(item.getItemType())
-                .build();
+    private ItemsEntity mapToItemEntity(Item item, OrderEntity orderEntity){
+        ItemsEntity itemsEntity = new ItemsEntity();
+        itemsEntity.setId(item.getId());
+        itemsEntity.setName(item.getName());
+        itemsEntity.setComment(item.getComment());
+        itemsEntity.setDueDate(item.getDueDate());
+        itemsEntity.setPurity(item.getPurity());
+        itemsEntity.setWeight(item.getWeight());
+        itemsEntity.setRate(item.getRate());
+        itemsEntity.setItemType(item.getItemType());
+        itemsEntity.setOrder(orderEntity);
+        itemsEntity.setCreatedBy(item.getCreatedBy());
+        itemsEntity.setLastModifiedBy(item.getLastModifiedBy());
+        itemsEntity.setStatus(item.getStatus());
+        itemsEntity.setCost(mapToCostEntity(item.getCost(), itemsEntity));
+        return itemsEntity;
     }
 
-    private CostEntity mapToCost(Cost cost){
-        return CostEntity.builder()
-                .jyala(cost.getJyala())
-                .build();
+    private CostEntity mapToCostEntity(Cost cost, ItemsEntity itemEntity){
+
+        CostEntity costEntity = new CostEntity();
+        costEntity.setId(cost.getId());
+        costEntity.setItem(itemEntity);
+        costEntity.setJyala(cost.getJyala());
+        costEntity.setJartiQuantity(cost.getJartiQuantity());
+        return costEntity;
     }
 }
