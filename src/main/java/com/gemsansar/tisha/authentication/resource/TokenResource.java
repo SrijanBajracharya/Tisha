@@ -2,6 +2,8 @@ package com.gemsansar.tisha.authentication.resource;
 
 import com.gemsansar.tisha.authentication.domain.dto.request.RefreshTokenRequest;
 import com.gemsansar.tisha.authentication.domain.dto.response.AccessTokenResponse;
+import com.gemsansar.tisha.platform.enums.AppRole;
+import com.gemsansar.tisha.user.domain.User;
 import com.gemsansar.tisha.user.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +28,22 @@ public class TokenResource {
         if (jwtUtil.validateToken(refreshToken)) {
             Claims claims = jwtUtil.extractClaims(refreshToken);
             Long userId = claims.get("userId", Long.class);
-            String username = claims.getSubject();
+            AppRole role = AppRole.valueOf(claims.get("role", String.class));
+            String firstName = claims.get("firstName", String.class);
+            String lastName = claims.get("lastName", String.class);
+            Long companyId = claims.get("companyId", Long.class);
+            String email = claims.getSubject();
 
-            String newAccessToken = jwtUtil.generateAccessToken(userId, username);
+            User user = User.builder()
+                    .id(userId)
+                    .email(email)
+                    .role(role)
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .companyId(companyId)
+                    .build();
+
+            String newAccessToken = jwtUtil.generateAccessToken(user);
 
             return ResponseEntity.ok(new AccessTokenResponse(newAccessToken));
         }

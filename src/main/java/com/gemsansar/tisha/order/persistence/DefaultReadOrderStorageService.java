@@ -4,9 +4,9 @@ import com.gemsansar.tisha.order.domain.Order;
 import com.gemsansar.tisha.order.entity.OrderEntity;
 import com.gemsansar.tisha.platform.exception.UseCaseException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +23,12 @@ class DefaultReadOrderStorageService implements ReadOrderStorageService {
     }
 
     @Override
-    public List<Order> fetchAll() {
-        return orderEntityMapper.mapToDomains(orderEntityRepository.findAll());
+    public Page<Order> fetchAll(Pageable pageable) {
+        return orderEntityRepository.findAll(pageable).map(orderEntityMapper::mapToDomain);
     }
 
     @Override
-    public List<Order> getOrderByUserId(Long userId) {
-        return orderEntityMapper.mapToDomains(orderEntityRepository.findByCustomerId(userId));
+    public Page<Order> getOrderByUserId(Long userId, Pageable pageable) {
+        return orderEntityRepository.findByCustomerId(userId, pageable).map(orderEntityMapper::mapToDomain);
     }
 }

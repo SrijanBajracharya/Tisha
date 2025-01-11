@@ -30,4 +30,5 @@ logging:
  level:
   org:
    flywaydb: DEBUG
-
+   springframework:
+    security: DEBUG

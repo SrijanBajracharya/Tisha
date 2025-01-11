@@ -36,8 +36,8 @@ class UserGateway {
     public LoginUserResponse loginUser(LoginUserRequest loginUserRequest){
         User user = loginUserUseCaseService.execute(loginUserRequest.getEmail(), loginUserRequest.getPassword());
         if (passwordEncoder.matches(loginUserRequest.getPassword(), user.getPassword())) {
-            String accessToken = jwtUtil.generateAccessToken(user.getId(), user.getEmail());
-            String refreshToken = jwtUtil.generateRefreshToken(user.getId(), user.getEmail());
+            String accessToken = jwtUtil.generateAccessToken(user);
+            String refreshToken = jwtUtil.generateRefreshToken(user);
 
             return LoginUserResponse.builder()
                     .email(user.getEmail())

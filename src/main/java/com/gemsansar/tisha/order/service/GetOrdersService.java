@@ -1,12 +1,12 @@
 package com.gemsansar.tisha.order.service;
 
 import com.gemsansar.tisha.order.domain.Order;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface GetOrdersService {
 
-    List<Order> getOrders();
+    Page<Order> getOrders(Pageable pageable);
 
-    List<Order> getOrdersByUserId(Long userId);
+    Page<Order> getOrdersByUserId(Long userId, Pageable pageable);
 }

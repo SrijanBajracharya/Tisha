@@ -1,14 +1,14 @@
 package com.gemsansar.tisha.order.persistence;
 
 import com.gemsansar.tisha.order.domain.Order;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ReadOrderStorageService {
 
     Order getOrderById(Long id);
 
-    List<Order> fetchAll();
+    Page<Order> fetchAll(Pageable pageable);
 
-    List<Order> getOrderByUserId(Long userId);
+    Page<Order> getOrderByUserId(Long userId, Pageable pageable);
 }

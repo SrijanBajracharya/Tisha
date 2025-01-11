@@ -4,10 +4,11 @@ import com.gemsansar.tisha.order.domain.dto.request.OrderRequest;
 import com.gemsansar.tisha.order.domain.dto.request.OrderUpdateRequest;
 import com.gemsansar.tisha.order.domain.dto.response.OrderResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
@@ -32,8 +33,10 @@ public class OrderResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getOrders(){
-        return ResponseEntity.ok(orderGateway.getOrders());
+    public ResponseEntity<Page<OrderResponse>> getOrders(@RequestParam(defaultValue = "0") Integer page,
+                                                         @RequestParam(defaultValue = "10") Integer limit){
+        Pageable pageable = PageRequest.of(page, limit);
+        return ResponseEntity.ok(orderGateway.getOrders(pageable));
     }
 
 }
