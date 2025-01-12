@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -27,7 +28,7 @@ public class Item {
     private Cost cost;
     private Instant lastModifiedDate;
     private Long lastModifiedBy;
-    private List<Stone> stones;
+    private List<Stone> stones = new ArrayList<>();
     private ItemType itemType;
     private Long createdBy;
 }

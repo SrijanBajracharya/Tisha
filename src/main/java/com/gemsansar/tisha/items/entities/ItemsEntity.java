@@ -11,6 +11,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -34,7 +35,7 @@ public class ItemsEntity extends AbstractBaseEntity {
     private OrderEntity order;
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<StoneEntity> stones;
+    private List<StoneEntity> stones = new ArrayList<>();
 
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private CostEntity cost;

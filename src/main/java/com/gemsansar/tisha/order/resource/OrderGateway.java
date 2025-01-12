@@ -44,7 +44,7 @@ class OrderGateway {
             throw new UseCaseException("Update operation not allowed for user:" + user.getId());
         }
 
-        Order order = orderDomainMapper.mapToDomain(orderInDb, request);
+        Order order = orderDomainMapper.mapToDomain(orderInDb, request, user);
         Order savedOrder = updateOrderUseCaseService.handle(order);
         return orderDomainMapper.mapToResponse(savedOrder);
 

@@ -21,4 +21,5 @@ public class OrderResponse {
     private Long customerId;
     private BigDecimal totalPrice;
     private List<ItemResponse> items;
+    private String comment;
 }

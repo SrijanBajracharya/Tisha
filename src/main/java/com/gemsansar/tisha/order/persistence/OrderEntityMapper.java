@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -29,7 +30,7 @@ class OrderEntityMapper {
         entity.setComment(order.getComment());
         entity.setDueDate(order.getDueDate());
         entity.setLastModifiedBy(order.getLastModifiedBy());
-        entity.setItems(mapToItemEntities(entity, order.getItems()));
+        entity.getItems().addAll(mapToItemEntities(entity, order.getItems()));
         entity.setCustomerId(order.getCustomerId());
         entity.setCreatedBy(order.getCreateBy());
         return entity;
@@ -116,13 +117,13 @@ class OrderEntityMapper {
         itemsEntity.setLastModifiedBy(item.getLastModifiedBy());
         itemsEntity.setStatus(item.getStatus());
         itemsEntity.setCost(mapToCostEntity(item.getCost(), itemsEntity));
-        itemsEntity.setStones(mapToStoneEntities(item.getStones(), itemsEntity, item.getCreatedBy()));
+        itemsEntity.getStones().addAll(mapToStoneEntities(item.getStones(), itemsEntity, item.getCreatedBy()));
         return itemsEntity;
     }
 
     private List<StoneEntity> mapToStoneEntities(List<Stone> stones, ItemsEntity itemsEntity, Long createdBy){
         if(CollectionUtils.isEmpty(stones)){
-            return null;
+            return new ArrayList<>();
         }
         return stones.stream().map(stone -> mapToStoneEntity(stone, itemsEntity, createdBy)).toList();
     }

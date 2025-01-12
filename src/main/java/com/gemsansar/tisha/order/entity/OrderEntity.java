@@ -9,6 +9,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,7 +27,7 @@ public class OrderEntity extends AbstractBaseEntity {
     private Long id;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemsEntity> items;
+    private List<ItemsEntity> items = new ArrayList<>();
 
     @Column(name = "due_date")
     private Instant dueDate;

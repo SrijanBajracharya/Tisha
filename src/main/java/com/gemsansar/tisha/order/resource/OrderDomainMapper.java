@@ -2,12 +2,10 @@ package com.gemsansar.tisha.order.resource;
 
 import com.gemsansar.tisha.cost.domain.Cost;
 import com.gemsansar.tisha.cost.domain.request.CostCreateRequest;
-import com.gemsansar.tisha.cost.domain.request.CostUpdateRequest;
 import com.gemsansar.tisha.cost.domain.response.CostResponse;
 import com.gemsansar.tisha.items.domain.Item;
 import com.gemsansar.tisha.items.domain.ItemStatus;
 import com.gemsansar.tisha.items.domain.dto.request.ItemCreateRequest;
-import com.gemsansar.tisha.items.domain.dto.request.ItemUpdateRequest;
 import com.gemsansar.tisha.items.domain.dto.response.ItemResponse;
 import com.gemsansar.tisha.order.domain.Order;
 import com.gemsansar.tisha.order.domain.OrderStatus;
@@ -29,9 +27,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -54,46 +49,13 @@ class OrderDomainMapper {
                 .build();
     }
 
-    public Order mapToDomain(Order order, OrderUpdateRequest request){
-        return Order.builder()
-                .id(order.getId())
-                .dueDate(request.getDueDate())
-                .status(request.getStatus())
-                .customerId(request.getCustomerId())
-                .items(mapToItemUpdateRequests(request.getItems(), order))
-                .comment(request.getComment())
-                .build();
-    }
-
-    private List<Item> mapToItemUpdateRequests(List<ItemUpdateRequest> requests, Order order){
-        return requests.stream().map(itemUpdateRequest -> mapToItemUpdateRequest(itemUpdateRequest, order)).toList();
-    }
-
-    private Item mapToItemUpdateRequest(ItemUpdateRequest itemUpdateRequest, Order order){
-        Map<Long, Item> itemRateMap = order.getItems().stream().collect(Collectors.toMap(Item::getId, Function.identity()));
-        return Item.builder()
-                .id(itemUpdateRequest.getId())
-                .comment(itemUpdateRequest.getComment())
-                .name(itemUpdateRequest.getName())
-                .purity(itemUpdateRequest.getPurity())
-                .weight(itemUpdateRequest.getWeight())
-                .status(itemUpdateRequest.getStatus())
-                .rate(itemRateMap.get(itemUpdateRequest.getId()) != null ? itemRateMap.get(itemUpdateRequest.getId()).getRate() : null)
-                .cost(mapToCost(itemUpdateRequest.getCost(), itemUpdateRequest.getId()))
-                .build();
-    }
-
-    private Cost mapToCost(CostUpdateRequest costUpdateRequest, Long itemId){
-        return Cost.builder()
-                .id(costUpdateRequest.getId())
-                .jyala(costUpdateRequest.getJyala())
-                .jartiQuantity(costUpdateRequest.getJartiQuantity())
-                .itemId(itemId)
-                .build();
-    }
-
-    public List<OrderResponse> mapToResponses(List<Order> orders){
-        return orders.stream().map(this::mapToResponse).toList();
+    public Order mapToDomain(Order order, OrderUpdateRequest request, User user){
+        order.setStatus(request.getStatus());
+        order.setComment(request.getComment());
+        order.setCustomerId(request.getCustomerId());
+        order.setDueDate(request.getDueDate());
+        order.setLastModifiedBy(user.getId());
+        return order;
     }
 
     public OrderResponse mapToResponse(Order order){
@@ -104,6 +66,7 @@ class OrderDomainMapper {
                 .customerId(order.getCustomerId())
                 .items(mapToItemResponses(order.getItems()))
                 .totalPrice(PriceCalculation.orderTotal(order))
+                .comment(order.getComment())
                 .build();
     }
 
