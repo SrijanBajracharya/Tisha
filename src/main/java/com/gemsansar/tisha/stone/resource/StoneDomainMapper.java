@@ -3,19 +3,24 @@ package com.gemsansar.tisha.stone.resource;
 import com.gemsansar.tisha.stone.domain.Stone;
 import com.gemsansar.tisha.stone.domain.dto.request.StoneUpdateRequest;
 import com.gemsansar.tisha.stone.domain.dto.response.StoneResponse;
+import com.gemsansar.tisha.stone.service.GetStoneTypeByIdUseCaseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 class StoneDomainMapper {
+
+    private final GetStoneTypeByIdUseCaseService getStoneTypeByIdUseCaseService;
 
     public Stone mapToDomain(Stone stoneInDb, StoneUpdateRequest request){
         return Stone.builder()
                 .id(stoneInDb.getId())
                 .itemId(stoneInDb.getItemId())
                 .price(request.getPrice())
-                .stoneType(request.getStoneType())
+                .stoneTypeId(request.getStoneTypeId())
                 .quantity(request.getQuantity())
                 .build();
     }
@@ -29,7 +34,7 @@ class StoneDomainMapper {
                 .id(stone.getId())
                 .itemId(stone.getItemId())
                 .price(stone.getPrice())
-                .stoneType(stone.getStoneType())
+                .stoneType(getStoneTypeByIdUseCaseService.execute(stone.getStoneTypeId()))
                 .quantity(stone.getQuantity())
                 .build();
     }

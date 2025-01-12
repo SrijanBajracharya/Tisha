@@ -33,7 +33,7 @@ public class ItemsEntity extends AbstractBaseEntity {
     @JoinColumn(name="order_id", nullable=false)
     private OrderEntity order;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<StoneEntity> stones;
 
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)

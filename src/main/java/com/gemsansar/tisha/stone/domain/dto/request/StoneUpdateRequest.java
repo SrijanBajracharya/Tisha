@@ -1,6 +1,5 @@
 package com.gemsansar.tisha.stone.domain.dto.request;
 
-import com.gemsansar.tisha.stone.domain.StoneType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +13,6 @@ public class StoneUpdateRequest {
 
     private BigDecimal price;
     private Integer quantity;
-    private StoneType stoneType;
+    private Long stoneTypeId;
     private Long itemId;
 }

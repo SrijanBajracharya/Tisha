@@ -40,7 +40,7 @@ class OrderGateway {
     public OrderResponse update(Long id, OrderUpdateRequest request){
         User user = sessionService.getCurrentUser();
         Order orderInDb = getOrderUseCaseService.getByOrderId(id);
-        if(!user.getId().equals(orderInDb.getCreateBy())){
+        if(!user.getId().equals(orderInDb.getCreateBy()) || user.getRole().equals(AppRole.SUPPLIER)){
             throw new UseCaseException("Update operation not allowed for user:" + user.getId());
         }
 

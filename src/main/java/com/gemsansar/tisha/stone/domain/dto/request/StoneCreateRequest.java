@@ -1,4 +1,4 @@
-package com.gemsansar.tisha.stone.domain;
+package com.gemsansar.tisha.stone.domain.dto.request;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,15 +6,13 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class Stone {
+public class StoneCreateRequest {
 
-    private Long id;
     private BigDecimal price;
     private Integer quantity;
     private Long stoneTypeId;
     private Long itemId;
-
 }

@@ -6,12 +6,21 @@ import com.gemsansar.tisha.items.domain.Item;
 import com.gemsansar.tisha.items.entities.ItemsEntity;
 import com.gemsansar.tisha.order.domain.Order;
 import com.gemsansar.tisha.order.entity.OrderEntity;
+import com.gemsansar.tisha.platform.exception.UseCaseException;
+import com.gemsansar.tisha.stone.domain.Stone;
+import com.gemsansar.tisha.stone.entities.StoneEntity;
+import com.gemsansar.tisha.stone.persistence.StoneTypeEntityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 class OrderEntityMapper {
+
+    private final StoneTypeEntityRepository stoneTypeEntityRepository;
 
     public OrderEntity mapToEntity(Order order){
         OrderEntity entity = new OrderEntity();
@@ -60,6 +69,24 @@ class OrderEntityMapper {
                 .lastModifiedBy(item.getLastModifiedBy())
                 .createdBy(item.getCreatedBy())
                 .status(item.getStatus())
+                .stones(mapToStones(item.getStones()))
+                .build();
+    }
+
+    private List<Stone> mapToStones(List<StoneEntity> stones){
+        if(CollectionUtils.isEmpty(stones)){
+            return null;
+        }
+        return stones.stream().map(this::mapToStone).toList();
+    }
+
+    private Stone mapToStone(StoneEntity stone){
+        return Stone.builder()
+                .id(stone.getId())
+                .price(stone.getPrice())
+                .quantity(stone.getQuantity())
+                .stoneTypeId(stone.getType().getId())
+                .itemId(stone.getItem().getId())
                 .build();
     }
 
@@ -91,7 +118,27 @@ class OrderEntityMapper {
         itemsEntity.setLastModifiedBy(item.getLastModifiedBy());
         itemsEntity.setStatus(item.getStatus());
         itemsEntity.setCost(mapToCostEntity(item.getCost(), itemsEntity));
+        itemsEntity.setStones(mapToStoneEntities(item.getStones(), itemsEntity, item.getCreatedBy()));
         return itemsEntity;
+    }
+
+    private List<StoneEntity> mapToStoneEntities(List<Stone> stones, ItemsEntity itemsEntity, Long createdBy){
+        if(CollectionUtils.isEmpty(stones)){
+            return null;
+        }
+        return stones.stream().map(stone -> mapToStoneEntity(stone, itemsEntity, createdBy)).toList();
+    }
+
+    private StoneEntity mapToStoneEntity(Stone stone, ItemsEntity itemsEntity, Long createdBy){
+        StoneEntity entity = new StoneEntity();
+        entity.setPrice(stone.getPrice());
+        entity.setId(stone.getId());
+        entity.setQuantity(stone.getQuantity());
+        entity.setItem(itemsEntity);
+        entity.setCreatedBy(createdBy);
+        entity.setLastModifiedBy(createdBy);
+        entity.setType(stoneTypeEntityRepository.findById(stone.getStoneTypeId()).orElseThrow(()-> new UseCaseException("Stone type not found with id:" + stone.getStoneTypeId())));
+        return entity;
     }
 
     private CostEntity mapToCostEntity(Cost cost, ItemsEntity itemEntity){

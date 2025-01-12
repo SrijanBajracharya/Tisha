@@ -17,12 +17,13 @@ import java.util.List;
 class StoneEntityMapper {
 
     private final ItemEntityRepository itemEntityRepository;
+    private final StoneTypeEntityRepository stoneTypeEntityRepository;
 
     public StoneEntity mapToEntity(Stone stone){
         ItemsEntity item = itemEntityRepository.findById(stone.getItemId()).orElseThrow(()-> new UseCaseException("Item not found with id: " + stone.getItemId()));
         return StoneEntity.builder()
                 .id(stone.getId())
-                .type(mapToStoneTypeEntity(stone.getStoneType()))
+                .type(stoneTypeEntityRepository.findById(stone.getStoneTypeId()).orElseThrow(()-> new UseCaseException("Stone type not found with id:" + stone.getStoneTypeId())))
                 .price(stone.getPrice())
                 .quantity(stone.getQuantity())
                 .item(item)
@@ -37,7 +38,7 @@ class StoneEntityMapper {
         return Stone.builder()
                 .id(entity.getId())
                 .price(entity.getPrice())
-                .stoneType(mapToStoneType(entity.getType()))
+                .stoneTypeId(entity.getType().getId())
                 .quantity(entity.getQuantity())
                 .itemId(entity.getItem().getId())
                 .build();

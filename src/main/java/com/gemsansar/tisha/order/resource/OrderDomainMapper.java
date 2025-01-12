@@ -16,9 +16,14 @@ import com.gemsansar.tisha.order.domain.dto.request.OrderUpdateRequest;
 import com.gemsansar.tisha.order.domain.dto.response.OrderResponse;
 import com.gemsansar.tisha.platform.utils.PriceCalculation;
 import com.gemsansar.tisha.stone.domain.Stone;
+import com.gemsansar.tisha.stone.domain.StoneType;
+import com.gemsansar.tisha.stone.domain.dto.request.StoneCreateRequest;
 import com.gemsansar.tisha.stone.domain.dto.response.StoneResponse;
+import com.gemsansar.tisha.stone.service.GetStoneTypeByIdUseCaseService;
 import com.gemsansar.tisha.user.domain.User;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,7 +34,10 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 class OrderDomainMapper {
+
+    private final GetStoneTypeByIdUseCaseService getStoneTypeByIdUseCaseService;
 
     private static final BigDecimal RATE_PER_GRAM = BigDecimal.valueOf(10);
 
@@ -130,18 +138,20 @@ class OrderDomainMapper {
     }
 
     private List<StoneResponse> mapToStoneResponses(List<Stone> stones){
-        if(stones == null){
+        if(CollectionUtils.isEmpty(stones)){
             return null;
         }
         return stones.stream().map(this::mapToStoneResponse).toList();
     }
 
     private StoneResponse mapToStoneResponse(Stone stone){
+        StoneType stoneType = getStoneTypeByIdUseCaseService.execute(stone.getStoneTypeId());
         return StoneResponse.builder()
                 .id(stone.getId())
                 .quantity(stone.getQuantity())
                 .price(stone.getPrice())
-                .stoneType(stone.getStoneType())
+                .stoneType(stoneType)
+                .itemId(stone.getItemId())
                 .build();
     }
 
@@ -162,6 +172,22 @@ class OrderDomainMapper {
                 .cost(mapToCost(item.getCost()))
                 .createdBy(createdBy)
                 .lastModifiedBy(createdBy)
+                .stones(mapToStones(item.getStones()))
+                .build();
+    }
+
+    private List<Stone> mapToStones(List<StoneCreateRequest> stoneRequests){
+        if(CollectionUtils.isEmpty(stoneRequests)){
+            return null;
+        }
+        return stoneRequests.stream().map(this::mapToStone).toList();
+    }
+
+    private Stone mapToStone(StoneCreateRequest payload){
+        return Stone.builder()
+                .price(payload.getPrice())
+                .quantity(payload.getQuantity())
+                .stoneTypeId(payload.getStoneTypeId())
                 .build();
     }
 
