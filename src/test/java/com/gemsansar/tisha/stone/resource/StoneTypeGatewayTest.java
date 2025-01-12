@@ -1,5 +1,6 @@
 package com.gemsansar.tisha.stone.resource;
 
+import com.gemsansar.tisha.authentication.service.SessionService;
 import com.gemsansar.tisha.stone.domain.StoneType;
 import com.gemsansar.tisha.stone.domain.dto.request.StoneTypeRequest;
 import com.gemsansar.tisha.stone.domain.dto.request.StoneTypeUpdateRequest;
@@ -34,6 +35,8 @@ class StoneTypeGatewayTest {
     private UpdateStoneTypeUseCaseService updateStoneTypeUseCaseService;
     @Mock
     private GetStoneTypeByIdUseCaseService getStoneTypeByIdUseCaseService;
+    @Mock
+    private SessionService sessionService;
     @InjectMocks
     private StoneTypeGateway underTest;
 
@@ -43,7 +46,7 @@ class StoneTypeGatewayTest {
     @BeforeEach
     void setup(){
         StoneTypeDomainMapper stoneTypeDomainMapper = new StoneTypeDomainMapper();
-        underTest = new StoneTypeGateway(getStoneTypeUseCaseService, stoneTypeDomainMapper,
+        underTest = new StoneTypeGateway(sessionService,getStoneTypeUseCaseService, stoneTypeDomainMapper,
                 createStoneTypeUseCaseService, updateStoneTypeUseCaseService, getStoneTypeByIdUseCaseService);
     }
 
