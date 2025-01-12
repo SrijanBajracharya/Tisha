@@ -35,10 +35,6 @@ class OrderEntityMapper {
         return entity;
     }
 
-    public List<Order> mapToDomains(List<OrderEntity> entities){
-        return entities.stream().map(this::mapToDomain).toList();
-    }
-
     public Order mapToDomain(OrderEntity entity){
         return Order.builder()
                 .id(entity.getId())
@@ -48,6 +44,8 @@ class OrderEntityMapper {
                 .lastModifiedBy(entity.getLastModifiedBy())
                 .items(mapToItemsDomain(entity.getItems()))
                 .customerId(entity.getCustomerId())
+                .createBy(entity.getCreatedBy())
+                .lastModifiedDate(entity.getLastModifiedDate())
                 .build();
     }
 
