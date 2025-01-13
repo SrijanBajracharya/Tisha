@@ -13,15 +13,14 @@ import org.springframework.stereotype.Component;
 class CostEntityMapper {
 
     private final ItemEntityRepository itemEntityRepository;
+    private final CostEntityRepository costEntityRepository;
 
     public CostEntity mapToEntity(Cost cost){
         ItemsEntity item = itemEntityRepository.findById(cost.getItemId()).orElseThrow(()-> new UseCaseException("Item not found with id:" + cost.getItemId()));
-        return CostEntity.builder()
-                .id(cost.getId())
-                .jyala(cost.getJyala())
-                .jartiQuantity(cost.getJartiQuantity())
-                .item(item)
-                .build();
+        CostEntity costEntity = costEntityRepository.findById(cost.getId()).orElseThrow(()-> new UseCaseException("Cost not found with id:" + cost.getId()));
+        costEntity.setJartiQuantity(cost.getJartiQuantity());
+        costEntity.setJyala(cost.getJyala());
+        return costEntity;
     }
 
     public Cost mapToDomain(CostEntity entity){
