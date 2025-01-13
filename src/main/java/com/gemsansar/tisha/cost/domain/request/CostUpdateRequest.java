@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Builder
 public class CostUpdateRequest {
 
-    private Long id;
     private BigDecimal jyala;
     private Double jartiQuantity;
 }
