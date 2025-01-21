@@ -14,5 +14,4 @@ public class StoneUpdateRequest {
     private BigDecimal price;
     private Integer quantity;
     private Long stoneTypeId;
-    private Long itemId;
 }

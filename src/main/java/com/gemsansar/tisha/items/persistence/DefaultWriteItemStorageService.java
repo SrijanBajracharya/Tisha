@@ -14,7 +14,7 @@ class DefaultWriteItemStorageService implements WriteItemStorageService{
 
     @Override
     public Item update(Item itemToSave) {
-        ItemsEntity savedEntity = itemEntityRepository.save(itemEntityMapper.mapToEntity(itemToSave, itemToSave.getId()));
+        ItemsEntity savedEntity = itemEntityRepository.save(itemEntityMapper.mapToEntity(itemToSave));
         return itemEntityMapper.mapToDomain(savedEntity);
     }
 }
