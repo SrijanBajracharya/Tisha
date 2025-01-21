@@ -27,4 +27,5 @@ public class ItemResponse {
     private BigDecimal rate;
     private ItemType itemType;
     private CostResponse costResponse;
+    private boolean active;
 }

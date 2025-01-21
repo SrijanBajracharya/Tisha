@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS T_ITEMS
     created_date TIMESTAMP NOT NULL default current_timestamp(),
     last_modified_by BIGINT(20) NOT NULL,
     last_modified_date TIMESTAMP NOT NULL default current_timestamp(),
+    active BIT(1) NOT NULL DEFAULT b'1',
 
     PRIMARY KEY (id),
     CONSTRAINT fk_item_order FOREIGN KEY (order_id) REFERENCES T_ORDER(id)

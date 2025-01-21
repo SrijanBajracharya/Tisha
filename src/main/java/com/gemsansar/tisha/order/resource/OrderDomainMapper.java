@@ -88,6 +88,7 @@ class OrderDomainMapper {
                 .total(PriceCalculation.calculateItemTotal(item))
                 .itemType(item.getItemType())
                 .costResponse(mapToCostResponse(item.getCost()))
+                .active(item.isActive())
                 .build();
     }
 
@@ -136,6 +137,7 @@ class OrderDomainMapper {
                 .createdBy(createdBy)
                 .lastModifiedBy(createdBy)
                 .stones(mapToStones(item.getStones()))
+                .active(true)
                 .build();
     }
 

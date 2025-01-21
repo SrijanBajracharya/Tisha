@@ -17,7 +17,9 @@ public class PriceCalculation {
         List<Item> items = order.getItems();
         BigDecimal orderTotal = BigDecimal.valueOf(0);
         for(Item item : items){
-            orderTotal = orderTotal.add(calculateItemTotal(item));
+            if(item.isActive()){
+                orderTotal = orderTotal.add(calculateItemTotal(item));
+            }
         }
         return orderTotal;
     }

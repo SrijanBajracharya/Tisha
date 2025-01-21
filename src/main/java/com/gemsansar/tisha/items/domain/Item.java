@@ -31,4 +31,5 @@ public class Item {
     private List<Stone> stones = new ArrayList<>();
     private ItemType itemType;
     private Long createdBy;
+    private boolean active;
 }

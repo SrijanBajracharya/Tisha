@@ -17,6 +17,7 @@ class ItemDomainMapper {
                 .purity(request.getPurity())
                 .weight(request.getWeight())
                 .status(request.getStatus())
+                .active(request.isActive())
                 .build();
     }
 
@@ -29,6 +30,7 @@ class ItemDomainMapper {
                 .status(item.getStatus())
                 .comment(item.getComment())
                 .rate(item.getRate())
+                .active(item.isActive())
                 .build();
     }
 }

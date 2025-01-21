@@ -62,4 +62,7 @@ public class ItemsEntity extends AbstractBaseEntity {
     @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private ItemType itemType;
+
+    @Column(name = "active")
+    private boolean active;
 }

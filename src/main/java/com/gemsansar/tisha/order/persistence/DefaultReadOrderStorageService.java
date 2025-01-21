@@ -24,7 +24,8 @@ class DefaultReadOrderStorageService implements ReadOrderStorageService {
 
     @Override
     public Page<Order> fetchAll(Pageable pageable) {
-        return orderEntityRepository.findAll(pageable).map(orderEntityMapper::mapToDomain);
+        Page<OrderEntity> orderEntities = orderEntityRepository.findAll(pageable);
+        return orderEntities.map(orderEntityMapper::mapToDomain);
     }
 
     @Override

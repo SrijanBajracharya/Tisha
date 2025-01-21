@@ -51,10 +51,10 @@ class OrderEntityMapper {
     }
 
     private List<Item> mapToItemsDomain(List<ItemsEntity> items){
-        return items.stream().map(this::mapToItemEntity).toList();
+        return items.stream().map(this::mapToItemDomain).toList();
     }
 
-    private Item mapToItemEntity(ItemsEntity item){
+    private Item mapToItemDomain(ItemsEntity item){
         return Item.builder()
                 .id(item.getId())
                 .name(item.getName())
@@ -69,6 +69,7 @@ class OrderEntityMapper {
                 .createdBy(item.getCreatedBy())
                 .status(item.getStatus())
                 .stones(mapToStones(item.getStones()))
+                .active(item.isActive())
                 .build();
     }
 
@@ -118,6 +119,7 @@ class OrderEntityMapper {
         itemsEntity.setStatus(item.getStatus());
         itemsEntity.setCost(mapToCostEntity(item.getCost(), itemsEntity));
         itemsEntity.getStones().addAll(mapToStoneEntities(item.getStones(), itemsEntity, item.getCreatedBy()));
+        itemsEntity.setActive(item.isActive());
         return itemsEntity;
     }
 

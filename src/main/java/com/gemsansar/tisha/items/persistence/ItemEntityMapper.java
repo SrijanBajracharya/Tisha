@@ -24,6 +24,7 @@ class ItemEntityMapper {
                 .comment(entity.getComment())
                 .lastModifiedDate(entity.getLastModifiedDate())
                 .lastModifiedBy(entity.getLastModifiedBy())
+                .active(entity.isActive())
                 .build();
     }
 
@@ -37,6 +38,7 @@ class ItemEntityMapper {
                 .weight(item.getWeight())
                 .cost(mapToCost(item.getCost(), itemId))
                 .status(item.getStatus())
+                .active(item.isActive())
                 .build();
     }
 

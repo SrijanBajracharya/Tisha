@@ -22,4 +22,5 @@ public class ItemUpdateRequest {
     private ItemStatus status;
     private List<StoneUpdateRequest> stones;
     private CostUpdateRequest cost;
+    private boolean active;
 }
