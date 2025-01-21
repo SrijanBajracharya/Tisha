@@ -22,4 +22,5 @@ public class ItemUpdateResponse {
     private BigDecimal total;
     private BigDecimal rate;
     private ItemType itemType;
+    private boolean active;
 }
