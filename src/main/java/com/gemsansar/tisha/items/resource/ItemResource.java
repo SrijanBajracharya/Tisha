@@ -17,4 +17,14 @@ public class ItemResource {
     public ResponseEntity<ItemUpdateResponse> update(@PathVariable Long id, @RequestBody ItemUpdateRequest request){
         return ResponseEntity.ok(itemGateway.update(id, request));
     }
+
+    @PutMapping("/{id}/activate")
+    public ResponseEntity<ItemUpdateResponse> activate(@PathVariable Long id){
+        return ResponseEntity.ok(itemGateway.activate(id));
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<ItemUpdateResponse> deactivate(@PathVariable Long id){
+        return ResponseEntity.ok(itemGateway.deactivate(id));
+    }
 }
