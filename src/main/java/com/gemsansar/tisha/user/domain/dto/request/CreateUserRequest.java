@@ -19,6 +19,12 @@ public class CreateUserRequest {
     private String lastName;
 
     @NotBlank
+    private String address;
+
+    @NotBlank
+    private String phoneNumber;
+
+    @NotBlank
     private String email;
 
     @NotBlank

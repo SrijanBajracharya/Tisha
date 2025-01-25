@@ -17,6 +17,8 @@ class UserDomainMapper {
                 .email(createUserRequest.getEmail())
                 .role(createUserRequest.getRole())
                 .companyId(createUserRequest.getCompanyId())
+                .address(createUserRequest.getAddress())
+                .phoneNumber(createUserRequest.getPhoneNumber())
                 .build();
     }
 

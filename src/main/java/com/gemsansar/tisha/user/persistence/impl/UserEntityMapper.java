@@ -17,6 +17,8 @@ class UserEntityMapper {
                 .password(user.getPassword())
                 .companyId(user.getCompanyId())
                 .role(user.getRole())
+                .address(user.getAddress())
+                .phoneNumber(user.getPhoneNumber())
                 .build();
     }
 
@@ -29,6 +31,8 @@ class UserEntityMapper {
                 .email(entity.getEmail())
                 .password(entity.getPassword())
                 .companyId(entity.getCompanyId())
+                .address(entity.getAddress())
+                .phoneNumber(entity.getPhoneNumber())
                 .build();
     }
 }

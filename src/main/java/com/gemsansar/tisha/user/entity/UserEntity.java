@@ -25,6 +25,12 @@ public class UserEntity {
     @Column(name = "last_name", length = 100, nullable = false)
     private String lastName;
 
+    @Column(name = "address", nullable = false)
+    private String address;
+
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
     @Column(name = "email", length = 50, unique = true, nullable = false)
     private String email;
 
